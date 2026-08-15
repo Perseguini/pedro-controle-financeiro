@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Controle Financeiro</title>
+<meta name="description" content="Controle financeiro para motoristas de aplicativo (Uber e 99)" />
+<meta name="theme-color" content="#14161A" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icons/icon-192.png" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="8.2" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="12" cy="12" r="2.1" fill="currentColor"/>
+        <line x1="12" y1="6.2" x2="12" y2="9.9" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="7.2" y1="14.8" x2="10.2" y2="13" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="16.8" y1="14.8" x2="13.8" y2="13" stroke="currentColor" stroke-width="1.8"/>
+      </svg>
+      <div class="brand-text">
+        <strong>Controle</strong><span>Financeiro</span>
+      </div>
+    </div>
+
+    <nav class="tabs" role="tablist">
+      <button class="tab-btn active" data-tab="inicio" role="tab" aria-selected="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 11.5 12 4l8 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 10v9h11v-9" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        <span>Início</span>
+      </button>
+      <button class="tab-btn" data-tab="diarias" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 16h16v-2.6L18 9.4a1.5 1.5 0 0 0-1.3-.9H7.3a1.5 1.5 0 0 0-1.3.9L4 13.4V16Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7.5" cy="17.3" r="1.4" fill="currentColor"/><circle cx="16.5" cy="17.3" r="1.4" fill="currentColor"/></svg>
+        <span>Diárias</span>
+      </button>
+      <button class="tab-btn" data-tab="estatisticas" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="12" width="3.2" height="7" rx="0.6" fill="currentColor"/><rect x="10.4" y="8" width="3.2" height="11" rx="0.6" fill="currentColor"/><rect x="15.8" y="4.5" width="3.2" height="14.5" rx="0.6" fill="currentColor"/></svg>
+        <span>Estatísticas</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button id="theme-toggle" class="footer-btn" type="button">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none"><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"/></svg>
+        <span id="theme-label">Tema claro</span>
+      </button>
+
+      <button id="update-btn" class="footer-btn" type="button">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0 1 13.9-5.4M20 12a8 8 0 0 1-13.9 5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M18 3.5V7h-3.5M6 20.5V17h3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Verificar atualização</span>
+      </button>
+
+      <button id="install-btn" class="footer-btn install" type="button">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 4v11.5M7.5 11 12 15.5 16.5 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 17.5v1.8A1.7 1.7 0 0 0 6.7 21h10.6a1.7 1.7 0 0 0 1.7-1.7v-1.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <span>Instalar aplicativo</span>
+      </button>
+
+      <p id="status-msg" class="status-msg"></p>
+      <p class="version-tag">v<span id="app-version"></span></p>
+    </div>
+  </aside>
+
+  <!-- ============ CONTENT ============ -->
+  <main class="content">
+
+    <!-- INÍCIO -->
+    <section id="tab-inicio" class="panel active">
+      <div class="panel-grid">
+        <div class="panel-left">
+          <p class="eyebrow">PAINEL DO DIA</p>
+          <h1>Bem-vindo de volta</h1>
+          <p class="lead">Acompanhe seus ganhos e gastos de hoje em um só lugar, mesmo sem internet.</p>
+
+          <div class="summary-cards" id="home-summary">
+            <div class="summary-card earn">
+              <span class="summary-label">Ganhos hoje</span>
+              <span class="summary-value" id="home-ganhos">R$ 0,00</span>
+            </div>
+            <div class="summary-card spend">
+              <span class="summary-label">Gastos hoje</span>
+              <span class="summary-value" id="home-gastos">R$ 0,00</span>
+            </div>
+            <div class="summary-card balance">
+              <span class="summary-label">Saldo hoje</span>
+              <span class="summary-value" id="home-saldo">R$ 0,00</span>
+            </div>
+          </div>
+
+          <button class="cta-btn" data-goto="diarias">Registrar corrida do dia</button>
+        </div>
+
+        <div class="panel-right">
+          <svg class="hero-illustration" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="200" cy="200" r="170" class="hero-bg"/>
+            <rect x="90" y="230" width="220" height="70" rx="18" class="hero-car-body"/>
+            <rect x="120" y="190" width="150" height="55" rx="16" class="hero-car-top"/>
+            <circle cx="150" cy="300" r="24" class="hero-wheel"/>
+            <circle cx="150" cy="300" r="9" class="hero-hub"/>
+            <circle cx="255" cy="300" r="24" class="hero-wheel"/>
+            <circle cx="255" cy="300" r="9" class="hero-hub"/>
+            <rect x="140" y="205" width="35" height="26" rx="4" class="hero-window"/>
+            <rect x="185" y="205" width="60" height="26" rx="4" class="hero-window"/>
+            <path d="M118 165 L142 165 L152 190 L128 190 Z" class="hero-sign"/>
+            <circle cx="315" cy="120" r="30" class="hero-coin"/>
+            <text x="315" y="128" text-anchor="middle" class="hero-coin-text">R$</text>
+            <circle cx="70" cy="100" r="18" class="hero-coin coin-sm"/>
+            <text x="70" y="106" text-anchor="middle" class="hero-coin-text small">R$</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIÁRIAS -->
+    <section id="tab-diarias" class="panel">
+      <div class="panel-header">
+        <div>
+          <p class="eyebrow">LANÇAMENTOS</p>
+          <h1>Diárias</h1>
+        </div>
+        <input type="date" id="entry-date" class="date-input" />
+      </div>
+
+      <p class="section-label">Ganhos</p>
+      <div class="cards-grid">
+        <div class="entry-card" data-kind="ganho" data-key="uber">
+          <div class="entry-icon uber-color">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="2.4" rx="1.2" fill="currentColor"/><path d="M6 12v-1.2A6 6 0 0 1 12 4.8v0a6 6 0 0 1 6 6V12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 12v2.5a4 4 0 0 0 8 0V12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <span class="entry-title">Uber</span>
+          <input type="text" inputmode="decimal" class="money-input" placeholder="R$ 0,00" data-mask="money" />
+          <button class="add-btn" type="button">Adicionar</button>
+        </div>
+
+        <div class="entry-card" data-kind="ganho" data-key="99">
+          <div class="entry-icon noventaenove-color">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 17h16v-6.2L17.5 6a1.4 1.4 0 0 0-1.2-.7H7.7A1.4 1.4 0 0 0 6.5 6L4 10.8V17Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="8" cy="18.2" r="1.5" fill="currentColor"/><circle cx="16" cy="18.2" r="1.5" fill="currentColor"/></svg>
+          </div>
+          <span class="entry-title">99</span>
+          <input type="text" inputmode="decimal" class="money-input" placeholder="R$ 0,00" data-mask="money" />
+          <button class="add-btn" type="button">Adicionar</button>
+        </div>
+      </div>
+
+      <p class="section-label">Gastos</p>
+      <div class="cards-grid">
+        <div class="entry-card" data-kind="gasto" data-key="gasolina">
+          <div class="entry-icon spend-color">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 20V6.5A1.5 1.5 0 0 1 6.5 5h6A1.5 1.5 0 0 1 14 6.5V20" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 20h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14 10h2.2L19 12.6V17a1 1 0 0 1-1 1h-.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="17.5" cy="17.3" r="1.2" fill="currentColor"/><path d="M8 8.5h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </div>
+          <span class="entry-title">Gasolina</span>
+          <input type="text" inputmode="decimal" class="money-input" placeholder="R$ 0,00" data-mask="money" />
+          <button class="add-btn" type="button">Adicionar</button>
+        </div>
+
+        <div class="entry-card" data-kind="gasto" data-key="borracharia">
+          <div class="entry-icon spend-color">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7.5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.6" stroke="currentColor" stroke-width="1.8"/><line x1="12" y1="4.5" x2="12" y2="9.4" stroke="currentColor" stroke-width="1.6"/><line x1="12" y1="14.6" x2="12" y2="19.5" stroke="currentColor" stroke-width="1.6"/><line x1="4.5" y1="12" x2="9.4" y2="12" stroke="currentColor" stroke-width="1.6"/><line x1="14.6" y1="12" x2="19.5" y2="12" stroke="currentColor" stroke-width="1.6"/></svg>
+          </div>
+          <span class="entry-title">Borracharia</span>
+          <input type="text" inputmode="decimal" class="money-input" placeholder="R$ 0,00" data-mask="money" />
+          <button class="add-btn" type="button">Adicionar</button>
+        </div>
+
+        <div class="entry-card" data-kind="gasto" data-key="pecas">
+          <div class="entry-icon spend-color">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M14.7 6.3a3.2 3.2 0 0 0-4.4 3.9L5 15.5V19h3.5l5.3-5.3a3.2 3.2 0 0 0 3.9-4.4l-2.4 2.4-2-2 2.4-2.4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/></svg>
+          </div>
+          <span class="entry-title">Peças</span>
+          <input type="text" inputmode="decimal" class="money-input" placeholder="R$ 0,00" data-mask="money" />
+          <button class="add-btn" type="button">Adicionar</button>
+        </div>
+
+        <div class="entry-card" data-kind="gasto" data-key="lavagem">
+          <div class="entry-icon spend-color">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 4.5c2.6 3.4 5 6.8 5 9.7a5 5 0 0 1-10 0c0-2.9 2.4-6.3 5-9.7Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="entry-title">Lavagem</span>
+          <input type="text" inputmode="decimal" class="money-input" placeholder="R$ 0,00" data-mask="money" />
+          <button class="add-btn" type="button">Adicionar</button>
+        </div>
+
+        <div class="entry-card" data-kind="gasto" data-key="outros">
+          <div class="entry-icon spend-color">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="7.5" width="16" height="11.5" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M4 10.5h16" stroke="currentColor" stroke-width="1.8"/><path d="M15 14h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M7 7.5V6a2 2 0 0 1 2-2h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </div>
+          <span class="entry-title">Outros</span>
+          <input type="text" inputmode="decimal" class="money-input" placeholder="R$ 0,00" data-mask="money" />
+          <button class="add-btn" type="button">Adicionar</button>
+        </div>
+      </div>
+
+      <p class="section-label">Lançamentos do dia</p>
+      <div id="today-list" class="today-list"></div>
+    </section>
+
+    <!-- ESTATÍSTICAS -->
+    <section id="tab-estatisticas" class="panel">
+      <p class="eyebrow">DESEMPENHO</p>
+      <h1>Estatísticas</h1>
+
+      <div class="filters">
+        <div class="segmented" id="period-filter">
+          <button data-value="diario">Diário</button>
+          <button data-value="semanal" class="active">Semanal</button>
+          <button data-value="mensal">Mensal</button>
+        </div>
+        <div class="segmented" id="platform-filter">
+          <button data-value="todas" class="active">Todas</button>
+          <button data-value="uber">Uber</button>
+          <button data-value="99">99</button>
+        </div>
+      </div>
+
+      <div class="summary-cards" id="stat-summary">
+        <div class="summary-card earn">
+          <span class="summary-label">Ganhos</span>
+          <span class="summary-value" id="stat-ganhos">R$ 0,00</span>
+        </div>
+        <div class="summary-card spend">
+          <span class="summary-label">Gastos</span>
+          <span class="summary-value" id="stat-gastos">R$ 0,00</span>
+        </div>
+        <div class="summary-card balance">
+          <span class="summary-label">Saldo</span>
+          <span class="summary-value" id="stat-saldo">R$ 0,00</span>
+        </div>
+      </div>
+
+      <p class="section-label">Gastos por categoria</p>
+      <div id="stat-categories" class="category-bars"></div>
+
+      <p class="section-label">Evolução</p>
+      <div id="stat-chart" class="bar-chart"></div>
+    </section>
+
+  </main>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
